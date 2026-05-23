@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>👾🧀 GAMES 🧀👾 — Play Now</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #0a0a0c;
+      --bg-surface: #111115;
+      --bg-card: #18181e;
+      --border: #2a2a35;
+      --accent: #ff4d8d;
+      --accent-dim: #ff4d8d22;
+      --accent-hover: #ff6fa5;
+      --text-primary: #f0f0f0;
+      --text-secondary: #888;
+      --text-muted: #444;
+      --topbar-h: 54px;
+      --sidebar-w: 210px;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--text-primary);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+    }
+
+    /* ─── SCROLLBAR ─── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: #2a2a35; border-radius: 99px; }
+
+    /* ─── TOPBAR ─── */
+    #topbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--topbar-h);
+      background: #0d0d10ee;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      z-index: 200;
+    }
+
+    .logo {
+      font-family: 'Space Mono', monospace;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--accent);
+      text-decoration: none;
+      letter-spacing: -0.3px;
+    }
+
+    .logo span {
+      color: var(--text-secondary);
+      font-weight: 400;
+    }
+
+    #topbar nav {
+      display: flex;
+      gap: 6px;
+    }
+
+    #topbar nav a {
+      font-size: 13px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      padding: 6px 14px;
+      border-radius: 99px;
+      transition: color 0.15s, background 0.15s;
+    }
+
+    #topbar nav a:hover {
+      color: var(--text-primary);
+      background: var(--bg-card);
+    }
+
+    #topbar nav a.active {
+      color: var(--accent);
+      background: var(--accent-dim);
+    }
+
+    /* ─── LAYOUT ─── */
+    #layout {
+      display: flex;
+      padding-top: var(--topbar-h);
+      min-height: 100vh;
+    }
+
+    /* ─── SIDEBAR ─── */
+    #sidebar {
+      width: var(--sidebar-w);
+      flex-shrink: 0;
+      position: sticky;
+      top: var(--topbar-h);
+      height: calc(100vh - var(--topbar-h));
+      overflow-y: auto;
+      background: var(--bg-surface);
+      border-right: 1px solid var(--border);
+      padding: 24px 10px;
+    }
+
+    .sidebar-section-label {
+      font-size: 10px;
+      font-family: 'Space Mono', monospace;
+      color: var(--text-muted);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 0 12px;
+      margin-bottom: 8px;
+      margin-top: 20px;
+    }
+
+    .sidebar-section-label:first-child {
+      margin-top: 0;
+    }
+
+    #sidebar a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: background 0.12s, color 0.12s;
+      margin-bottom: 1px;
+    }
+
+    #sidebar a:hover {
+      background: var(--bg-card);
+      color: var(--text-primary);
+    }
+
+    #sidebar a.active {
+      background: var(--accent-dim);
+      color: var(--accent);
+    }
+
+    #sidebar a .badge {
+      margin-left: auto;
+      font-size: 10px;
+      background: var(--bg-card);
+      color: var(--text-muted);
+      padding: 2px 7px;
+      border-radius: 99px;
+      font-family: 'Space Mono', monospace;
+    }
+
+    #sidebar a.active .badge {
+      background: var(--accent-dim);
+      color: var(--accent);
+    }
+
+    /* ─── MAIN ─── */
+    #main {
+      flex: 1;
+      padding: 36px 32px;
+      min-width: 0;
+    }
+
+    .page-header {
+      margin-bottom: 32px;
+    }
+
+    .page-header h1 {
+      font-family: 'Space Mono', monospace;
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+      letter-spacing: -0.5px;
+    }
+
+    .page-header p {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    .section-title {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    /* ─── GAME CARDS ─── */
+    .game-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+      gap: 14px;
+      margin-bottom: 40px;
+    }
+
+    .game-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px 18px 18px;
+      text-decoration: none;
+      display: block;
+      cursor: pointer;
+      transition: border-color 0.15s, transform 0.15s, background 0.15s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .game-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top left, var(--accent-dim), transparent 70%);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .game-card:hover {
+      border-color: #ff4d8d55;
+      transform: translateY(-3px);
+      background: #1e1e26;
+    }
+
+    .game-card:hover::before {
+      opacity: 1;
+    }
+
+    .game-emoji {
+      font-size: 30px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .game-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 5px;
+    }
+
+    .game-tag {
+      font-size: 11px;
+      font-family: 'Space Mono', monospace;
+      color: var(--text-muted);
+    }
+
+    .game-tag.hot {
+      color: var(--accent);
+    }
+
+    /* ─── IMAGE GAME CARD ─── */
+    .game-card.img-card {
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .game-card.img-card .card-img {
+      width: 100%;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s;
+    }
+
+    .game-card.img-card:hover .card-img {
+      transform: scale(1.05);
+    }
+
+    .game-card.img-card .card-info {
+      padding: 12px 14px 14px;
+    }
+
+    /* ─── AD PLACEHOLDER ─── */
+    .ad-slot {
+      background: var(--bg-surface);
+      border: 1px dashed var(--border);
+      border-radius: 10px;
+      height: 90px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-family: 'Space Mono', monospace;
+      color: var(--text-muted);
+      margin-bottom: 32px;
+      letter-spacing: 1px;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      text-align: center;
+      padding: 24px;
+      font-size: 12px;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+      font-family: 'Space Mono', monospace;
+    }
+
+    /* ─── MOBILE ─── */
+    @media (max-width: 700px) {
+      #sidebar { display: none; }
+      #main { padding: 20px 16px; }
+      #topbar nav a span { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOPBAR -->
+  <header id="topbar">
+    <a class="logo" href="index.html">👾 <span>gamezone</span></a>
+    <nav>
+      <a href="index.html">home</a>
+      <a href="games.html" class="active">games</a>
+      <a href="#">leaderboard</a>
+      <a href="#">about</a>
+    </nav>
+  </header>
+
+  <div id="layout">
+
+    <!-- SIDEBAR -->
+    <aside id="sidebar">
+      <a href="index.html">🏠 home</a>
+      <div class="sidebar-section-label">browse</div>
+      <a href="games.html" class="active">👾🧀 GAMES 🧀👾 <span class="badge">6</span></a>
+      <a href="#">🆕 new games</a>
+      <a href="#">🔥 popular</a>
+
+      <div class="sidebar-section-label">category</div>
+      <a href="#">🕹️ arcade</a>
+      <a href="#">🧩 puzzle</a>
+      <a href="#">🃏 cards</a>
+      <a href="#">⚡ speed</a>
+
+      <div class="sidebar-section-label">more</div>
+      <a href="#">🏆 leaderboard</a>
+      <a href="#">📋 about</a>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main id="main">
+
+      <div class="page-header">
+        <h1>👾🧀 GAMES 🧀👾</h1>
+        <p>pick a game and start playing</p>
+      </div>
+
+      <!-- Ad slot — replace with your real AdSense code -->
+      <div class="ad-slot">[ ad banner goes here ]</div>
+
+      <div class="section-title">all games</div>
+      <div class="game-grid">
+
+        <a class="game-card img-card" href="games/stickman-hook/index.html">
+          <img class="card-img" src="images/stickman-hook.png" alt="Stickman Hook" />
+          <div class="card-info">
+            <div class="game-name">Stickman Hook</div>
+            <div class="game-tag hot">🔥 popular</div>
+          </div>
+        </a>
+
+        <a class="game-card" href="#">
+          <span class="game-emoji">🕹️</span>
+          <div class="game-name">Game 2</div>
+          <div class="game-tag">arcade</div>
+        </a>
+
+        <a class="game-card" href="#">
+          <span class="game-emoji">🎲</span>
+          <div class="game-name">Game 3</div>
+          <div class="game-tag">puzzle</div>
+        </a>
+
+        <a class="game-card" href="#">
+          <span class="game-emoji">🃏</span>
+          <div class="game-name">Game 4</div>
+          <div class="game-tag">cards</div>
+        </a>
+
+        <a class="game-card" href="#">
+          <span class="game-emoji">⚡</span>
+          <div class="game-name">Game 5</div>
+          <div class="game-tag">speed</div>
+        </a>
+
+        <a class="game-card" href="#">
+          <span class="game-emoji">🏆</span>
+          <div class="game-name">Game 6</div>
+          <div class="game-tag">challenge</div>
+        </a>
+
+      </div>
+
+      <!-- Second ad slot -->
+      <div class="ad-slot">[ ad banner goes here ]</div>
+
+    </main>
+  </div>
+
+  <footer>
+    made with 🧀 &amp; 👾 — yourusername.github.io
+  </footer>
+
+</body>
+</html>

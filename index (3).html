@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>👾🧀 gamezone — home</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0a0a0c; --bg-surface: #111115; --bg-card: #18181e;
+      --border: #2a2a35; --accent: #ff4d8d; --accent-dim: #ff4d8d22;
+      --text-primary: #f0f0f0; --text-secondary: #888; --text-muted: #444;
+      --topbar-h: 54px; --sidebar-w: 210px;
+    }
+    html, body { height: 100%; background: var(--bg); color: var(--text-primary); font-family: 'DM Sans', sans-serif; font-size: 15px; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: #2a2a35; border-radius: 99px; }
+
+    #topbar {
+      position: fixed; top: 0; left: 0; right: 0; height: var(--topbar-h);
+      background: #0d0d10ee; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border); display: flex; align-items: center;
+      justify-content: space-between; padding: 0 24px; z-index: 200;
+    }
+    .logo { font-family: 'Space Mono', monospace; font-size: 15px; font-weight: 700; color: var(--accent); text-decoration: none; letter-spacing: -0.3px; }
+    .logo span { color: var(--text-secondary); font-weight: 400; }
+    #topbar nav { display: flex; gap: 6px; }
+    #topbar nav a { font-size: 13px; color: var(--text-secondary); text-decoration: none; padding: 6px 14px; border-radius: 99px; transition: color 0.15s, background 0.15s; }
+    #topbar nav a:hover { color: var(--text-primary); background: var(--bg-card); }
+    #topbar nav a.active { color: var(--accent); background: var(--accent-dim); }
+
+    #layout { display: flex; padding-top: var(--topbar-h); min-height: 100vh; }
+
+    #sidebar {
+      width: var(--sidebar-w); flex-shrink: 0; position: sticky;
+      top: var(--topbar-h); height: calc(100vh - var(--topbar-h));
+      overflow-y: auto; background: var(--bg-surface);
+      border-right: 1px solid var(--border); padding: 24px 10px;
+    }
+    .sidebar-section-label {
+      font-size: 10px; font-family: 'Space Mono', monospace; color: var(--text-muted);
+      letter-spacing: 2px; text-transform: uppercase; padding: 0 12px;
+      margin-bottom: 8px; margin-top: 20px;
+    }
+    .sidebar-section-label:first-child { margin-top: 0; }
+    #sidebar a {
+      display: flex; align-items: center; gap: 10px; padding: 9px 12px;
+      border-radius: 8px; font-size: 13px; font-weight: 500; color: var(--text-secondary);
+      text-decoration: none; transition: background 0.12s, color 0.12s; margin-bottom: 1px;
+    }
+    #sidebar a:hover { background: var(--bg-card); color: var(--text-primary); }
+    #sidebar a.active { background: var(--accent-dim); color: var(--accent); }
+    #sidebar a .badge {
+      margin-left: auto; font-size: 10px; background: var(--bg-card);
+      color: var(--text-muted); padding: 2px 7px; border-radius: 99px;
+      font-family: 'Space Mono', monospace;
+    }
+
+    #main { flex: 1; padding: 60px 48px; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; max-width: 780px; }
+
+    .hero-tag { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--accent); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 18px; opacity: 0.8; }
+
+    .hero-title { font-family: 'Space Mono', monospace; font-size: clamp(26px, 4vw, 46px); font-weight: 700; color: var(--text-primary); line-height: 1.2; margin-bottom: 24px; letter-spacing: -1px; }
+    .hero-title .cheese { color: #f5c518; }
+
+    .hero-body { font-size: 15px; color: var(--text-secondary); line-height: 1.75; margin-bottom: 16px; max-width: 560px; }
+    .hero-body strong { color: var(--text-primary); font-weight: 600; }
+
+    .stats-row { display: flex; gap: 32px; margin-bottom: 44px; margin-top: 8px; }
+    .stat { display: flex; flex-direction: column; gap: 2px; }
+    .stat-num { font-family: 'Space Mono', monospace; font-size: 22px; font-weight: 700; color: var(--text-primary); }
+    .stat-label { font-size: 12px; color: var(--text-muted); }
+
+    /* CHEESE BUTTON */
+    .start-btn {
+      position: relative; display: inline-flex; align-items: center; gap: 10px;
+      padding: 16px 36px; background: #7c3aed; color: #fff;
+      font-family: 'Space Mono', monospace; font-size: 15px; font-weight: 700;
+      letter-spacing: 0.5px; border-radius: 14px; text-decoration: none;
+      cursor: pointer; overflow: hidden;
+      transition: color 0.3s, background 0.3s, transform 0.15s, box-shadow 0.3s;
+      box-shadow: 0 4px 24px #7c3aed44;
+    }
+    .start-btn::before {
+      content: ''; position: absolute; inset: 0;
+      background-image:
+        radial-gradient(circle, #7c3aed55 6px, transparent 6px),
+        radial-gradient(circle, #7c3aed55 4px, transparent 4px),
+        radial-gradient(circle, #7c3aed55 5px, transparent 5px),
+        radial-gradient(circle, #7c3aed55 3px, transparent 3px),
+        radial-gradient(circle, #7c3aed55 5px, transparent 5px),
+        radial-gradient(circle, #7c3aed55 4px, transparent 4px);
+      background-position: 18px 12px, 60px 22px, 110px 8px, 155px 20px, 85px 10px, 38px 26px;
+      background-repeat: no-repeat;
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .start-btn:hover {
+      background: #f5c518; color: #1a1000;
+      transform: translateY(-2px); box-shadow: 0 8px 32px #f5c51844;
+    }
+    .start-btn:hover::before {
+      background-image:
+        radial-gradient(circle, #7c3aed77 6px, transparent 6px),
+        radial-gradient(circle, #7c3aed77 4px, transparent 4px),
+        radial-gradient(circle, #7c3aed77 5px, transparent 5px),
+        radial-gradient(circle, #7c3aed77 3px, transparent 3px),
+        radial-gradient(circle, #7c3aed77 5px, transparent 5px),
+        radial-gradient(circle, #7c3aed77 4px, transparent 4px);
+      opacity: 1;
+    }
+    .start-btn:active { transform: translateY(1px); }
+
+    .divider { width: 100%; max-width: 560px; height: 1px; background: var(--border); margin: 48px 0 32px; }
+
+    .features-title { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px; }
+
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 14px; width: 100%; max-width: 660px; }
+
+    .feature-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 18px 16px; }
+    .feature-icon { font-size: 22px; margin-bottom: 10px; display: block; }
+    .feature-name { font-size: 13px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }
+    .feature-desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+
+    footer { text-align: center; padding: 24px; font-size: 12px; color: var(--text-muted); border-top: 1px solid var(--border); font-family: 'Space Mono', monospace; }
+
+    @media (max-width: 700px) {
+      #sidebar { display: none; }
+      #main { padding: 32px 20px; }
+      .stats-row { gap: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header id="topbar">
+    <a class="logo" href="index.html">👾 <span>gamezone</span></a>
+    <nav>
+      <a href="index.html" class="active">home</a>
+      <a href="games.html">games</a>
+      <a href="#">leaderboard</a>
+      <a href="#">about</a>
+    </nav>
+  </header>
+
+  <div id="layout">
+    <aside id="sidebar">
+      <div class="sidebar-section-label">browse</div>
+      <a href="index.html" class="active">🏠 home</a>
+      <a href="games.html">👾🧀 GAMES 🧀👾 <span class="badge">6</span></a>
+      <a href="#">🆕 new games</a>
+      <a href="#">🔥 popular</a>
+      <div class="sidebar-section-label">category</div>
+      <a href="#">🕹️ arcade</a>
+      <a href="#">🧩 puzzle</a>
+      <a href="#">🃏 cards</a>
+      <a href="#">⚡ speed</a>
+      <div class="sidebar-section-label">more</div>
+      <a href="#">🏆 leaderboard</a>
+      <a href="#">📋 about</a>
+    </aside>
+
+    <main id="main">
+      <div class="hero-tag">// welcome to gamezone</div>
+
+      <h1 class="hero-title">
+        your new favourite<br>
+        place to <span class="cheese">waste time</span> 🧀
+      </h1>
+
+      <p class="hero-body">
+        <strong>gamezone</strong> is a free browser games hub with no downloads, no sign-ups, and no nonsense.
+        just click a game and start playing — straight from your browser, anytime, anywhere.
+      </p>
+
+      <p class="hero-body">
+        we've got arcade classics, puzzle games, card games and more — all hand-picked and
+        totally free. new games get added regularly so there's always something fresh to try.
+        grab some 🧀 and get comfortable.
+      </p>
+
+      <div class="stats-row">
+        <div class="stat"><span class="stat-num">6+</span><span class="stat-label">games</span></div>
+        <div class="stat"><span class="stat-num">100%</span><span class="stat-label">free</span></div>
+        <div class="stat"><span class="stat-num">0</span><span class="stat-label">downloads needed</span></div>
+      </div>
+
+      <a class="start-btn" href="games.html">👾 start playing</a>
+
+      <div class="divider"></div>
+
+      <div class="features-title">why gamezone?</div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <span class="feature-icon">⚡</span>
+          <div class="feature-name">instant play</div>
+          <div class="feature-desc">no downloads, no installs. click and play in seconds.</div>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon">🆓</span>
+          <div class="feature-name">completely free</div>
+          <div class="feature-desc">every game on this site is free. always.</div>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon">🧀</span>
+          <div class="feature-name">cheesy vibes</div>
+          <div class="feature-desc">we take our cheese seriously around here.</div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <footer>made with 🧀 &amp; 👾 — yourusername.github.io</footer>
+
+</body>
+</html>
